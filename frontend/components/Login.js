@@ -1,21 +1,24 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import {useInput} from '../hooks/index.js'
 
 const BASE_URL = 'http://localhost:9009/acme/auth'
 
 export default function Login() {
   const navigate = useNavigate()
   const [message, setMessage] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const onUsernameChange = e => setUsername(e.target.value)
-  const onPasswordChange = e => setPassword(e.target.value)
+  const usernameInput = useInput('username')
+  const passwordInput = useInput('password')
+  // const [username, setUsername] = useState('')
+  // const [password, setPassword] = useState('')
+  // const onUsernameChange = e => setUsername(e.target.value)
+  // const onPasswordChange = e => setPassword(e.target.value)
   const onSubmit = async e => {
     e.preventDefault()
     const payload = {
-      username,
-      password,
+      username:usernameInput.value,
+      password:passwordInput.value,
     }
     try {
       const res = await axios.post(`${BASE_URL}/login`, payload)
@@ -33,15 +36,17 @@ export default function Login() {
       <form onSubmit={onSubmit}>
         <input
           type="text"
-          placeholder="username"
-          value={username}
-          onChange={onUsernameChange}
+          placeholder="username"          
+          {...usernameInput}
+          // value={username}
+          // onChange={onUsernameChange}
         />
         <input
           type="password"
-          placeholder="password"
-          value={password}
-          onChange={onPasswordChange}
+          placeholder="password"         
+          {...passwordInput}
+          // value={password}
+          // onChange={onPasswordChange}
         />
         <button>Login</button>
       </form>
